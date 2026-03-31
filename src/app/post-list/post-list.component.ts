@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject,computed } from '@angular/core';
 import { DataService } from '../data.service';
 import { Post } from '../post';
 import { RouterModule } from '@angular/router';
@@ -11,13 +11,6 @@ import { RouterModule } from '@angular/router';
 })
 export class PostListComponent {
 
-  postService = inject(DataService);
-  posts: Post[] = [];
-
-  ngOnInit(){
-    // this.posts = this.postService.posts;
-    this.postService.getPosts().subscribe((posts) => {
-      this.posts = posts;
-    }); 
-  } 
+  dataService = inject(DataService);
+  posts = computed(() => this.dataService.posts());
 }
