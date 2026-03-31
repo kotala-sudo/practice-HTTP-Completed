@@ -8,18 +8,17 @@ import { Observable} from 'rxjs';
 })
 export class DataService {
 
-  private http = inject(HttpClient);
-  url = 'https://jsonplaceholder.typicode.com/posts';
+  posts = signal<Post[]>([]);
+  http = inject(HttpClient);
 
-  getPosts(): Observable<Post[]>{
-    return this.http.get<Post[]>(this.url);
+  url = 'https://jsonplaceholder.typicode.com/posts'
+
+  loadPosts() {
+    this.http.get<Post[]>(this.url).subscribe((post: Post[]) => this.posts.set(post))
   }
 
-  //retrieves posts by id
-  getPostById(id: number): Observable<Post[]>{
-    const params = new HttpParams().set('id', id);
-    return this.http.get<Post[]>(this.url, {params});
-    // return this.http.get<Post>(`${this.url}/${id}`);
+  getPostById(postId: number) {
+    return this.posts().find(post => post.id === postId);
   }
 }
 
